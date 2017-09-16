@@ -1,0 +1,13 @@
+{
+  "pages":[
+    "pages/home/home",
+    "pages/index/index",
+    "pages/logs/logs"
+  ],
+  "window":{
+    "backgroundTextStyle":"dark",
+    "navigationBarBackgroundColor": "#007AFF",
+    "navigationBarTitleText": "今日公交",
+    "navigationBarTextStyle":"white"
+  }
+}

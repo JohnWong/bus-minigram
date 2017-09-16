@@ -1,0 +1,28 @@
+<!--home.wxml-->
+<scroll-view>
+  <view class="search-bar">
+    <view class="search-inner">
+      <icon size="12" class="search-icon" type="search" />
+      <input class="search-input" bindfocus="searchFocus" bindblur="searchBlur" bindconfirm="searchConfirm" value="{{!focused || cleared? '' : this}}" />
+      <icon size="12" class="clear-icon" color="lightgray" type="cancel" style="display: {{focused ? 'block' : 'none'}}" bindtap="searchClear" />
+      <text class="search-hint" style="display: {{focused ? 'none' : ''}}">搜索线路/站点</text>
+    </view>
+    <text class="search-cancel" style="display: {{focused ? '' : 'none'}};">取消</text>
+  </view>
+  <view style="padding: 16px;">
+    <text>附近站点</text>
+  </view>
+  <view wx:for="{{stops}}" wx:key="stopName">
+    <view>
+      <text>{{item.stopName}}</text>
+      <text>{{item.userDistance}}</text>
+    </view>
+    <view>
+    <text>{{item.routeName}}</text>
+    <text>{{item.targetDistance}}</text>
+    </view>
+    <view>
+    <text>下一站：{{item.nextStation}}</text>
+    </view>
+  </view>
+</scroll-view>
