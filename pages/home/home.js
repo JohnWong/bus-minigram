@@ -7,6 +7,9 @@ Page({
     logs: []
   },
   onLoad: function () {
+    this.reloadData();
+  },
+  reloadData: function () {
     var self = this
     wx.getLocation({
       type: 'gcj02', //返回可以用于wx.openLocation的经纬度
@@ -25,22 +28,23 @@ Page({
               var onestop = item.stops[0];
               var oneroute = onestop.routes[0];
               var onebus = oneroute.buses[0];
-              var targetDistance;
-              if (onebus && onebus.targetDistance) {
-                if (onebus.targetDistance > 1000) {
-                  targetDistance = Math.round(onebus.targetDistance / 100) / 10 + "公里";
+              function formatDiatance(dist) {
+                if (dist) {
+                  if (dist > 1000) {
+                    return Math.round(dist / 100) / 10 + "公里";
+                  } else {
+                    return dist + "米";
+                  }
                 } else {
-                  targetDistance = onebus.targetDistance + "米";
+                  return "暂无";
                 }
-              } else {
-                targetDistance = "暂无";
               }
               var stop = {
                 stopName: item.stopName,
-                distance: onestop.stop.userDistance,
+                userDistance: formatDiatance(onestop ? onestop.stop.userDistance : undefined),
                 routeName: oneroute.route.routeName,
                 nextStation: oneroute.nextStation,
-                targetDistance: targetDistance
+                targetDistance: formatDiatance(onebus ? onebus.targetDistance : undefined)
               }
               stops.push(stop)
             }
@@ -61,9 +65,7 @@ Page({
     })
   },
   onPullDownRefresh: function () {
-    setTimeout(function () {
-      wx.stopPullDownRefresh();
-    }, 1500);
+    this.reloadData();
   },
   searchFocus: function () {
     this.setData({

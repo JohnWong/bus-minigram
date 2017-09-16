@@ -45,3 +45,11 @@
   margin-left: 6px;
   margin-right: 6px;
 }
+.tab-header {
+  padding: 8px 0 8px 0;
+  background: white;
+  display: flex; 
+  justify-content: center;
+  color: #007AFF;
+  font-size: 15px;
+}
