@@ -15,5 +15,18 @@ const formatNumber = n => {
 }
 
 module.exports = {
-  formatTime: formatTime
+  formatTime: formatTime,
+  formatDistance: formatDistance
+}
+
+function formatDistance(dist) {
+  if (dist) {
+    if (dist > 1000) {
+      return Math.round(dist / 100) / 10 + "公里";
+    } else {
+      return dist + "米";
+    }
+  } else {
+    return "暂无";
+  }
 }

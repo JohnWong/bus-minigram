@@ -1,0 +1,12 @@
+/* pages/stop/stop.wxss */
+
+.bus-info {
+  font-size: 12px;
+  color: #8e8e93;
+  margin-top: 4px;
+  display: flex;
+}
+
+.bus-info view {
+  margin-right: 8px;
+}

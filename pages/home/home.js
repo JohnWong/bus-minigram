@@ -28,29 +28,23 @@ Page({
               var onestop = item.stops[0];
               var oneroute = onestop.routes[0];
               var onebus = oneroute.buses[0];
-              function formatDiatance(dist) {
-                if (dist) {
-                  if (dist > 1000) {
-                    return Math.round(dist / 100) / 10 + "公里";
-                  } else {
-                    return dist + "米";
-                  }
-                } else {
-                  return "暂无";
-                }
-              }
+              
               var stop = {
+                stopId: onestop.stop.amapId,
                 stopName: item.stopName,
-                userDistance: formatDiatance(onestop ? onestop.stop.userDistance : undefined),
+                userDistance: util.formatDistance(onestop ? onestop.stop.userDistance : undefined),
                 routeName: oneroute.route.routeName,
                 nextStation: oneroute.nextStation,
-                targetDistance: formatDiatance(onebus ? onebus.targetDistance : undefined)
+                targetDistance: util.formatDistance(onebus ? onebus.targetDistance : undefined)
               }
               stops.push(stop)
             }
             self.setData({
               stops: stops
             })
+          },
+          fail: function () {
+
           }
         })
         // wx.openLocation({
