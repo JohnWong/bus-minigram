@@ -30,20 +30,7 @@ Page({
         wx.setNavigationBarTitle({
           title: data.routeName,
         })
-        var buses = oneroute.nextBuses.buses;
-        var busMap = {};
-        for (var i in buses) {
-          var bus = buses[i];
-          var nextNo = bus.nextSeqNo;
-          if (!busMap[nextNo]) {
-            busMap[nextNo] = {}
-          }
-          if (bus.isArrive) {
-            busMap[nextNo].arrive = true
-          } else {
-            busMap[nextNo].nextBus = true
-          }
-        }
+        
         var stops = [];
         var userIndex = 0;
         for (var i =0; i < oneroute.stops.length; i++) {
@@ -52,12 +39,21 @@ Page({
           if (userStop) {
             userIndex = i;
           }
+          var bus = {}
+          for (var j in item.buses) {
+            var busItem = item.buses[j];
+            if (busItem.isArrive) {
+              bus.arrive = true;
+            } else {
+              bus.nextBus = true;
+            }
+          }
           stops.push({
             stopName: item.routeStop.stopName,
             stopId: item.routeStop.stopId,
             userStop: userStop,
             metroTrans: item.routeStop.metroTrans,
-            bus: busMap[item.routeStop.seqNo]
+            bus: bus
           })
         }
         
