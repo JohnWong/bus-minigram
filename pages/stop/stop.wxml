@@ -1,6 +1,6 @@
 <!--pages/stop/stop.wxml-->
 <view style="background: white; margin-top: 8px;" wx:for="{{routes}}" wx:key="routeName">
-  <view style="padding: 16px 16px 16px 16px;">
+  <view style="padding: 16px;">
     <view style="display: flex; justify-content: space-between;">
       <text style="font-size: 18px; color: #4a4a4a;">{{item.routeName}}</text>
       <text style="font-size: 14px;">{{item.targetDistance}}</text>

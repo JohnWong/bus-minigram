@@ -43,8 +43,8 @@ Page({
             targetDistance: util.formatDistance(onebus ? onebus.targetDistance : undefined),
             origin: oneroute.route.origin,
             terminal: oneroute.route.terminal,
-            firstBus: oneroute.route.firstBus,
-            lastBus: oneroute.route.lastBus,
+            firstBus: util.formatBusTime(oneroute.route.firstBus),
+            lastBus: util.formatBusTime(oneroute.route.lastBus),
             airPrice: oneroute.route.airPrice,
             routeId: oneroute.route.routeId
           }

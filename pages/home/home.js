@@ -1,5 +1,6 @@
 //home.js
 const util = require('../../utils/util.js')
+const app = getApp()
 
 Page({
   data: {
@@ -8,6 +9,11 @@ Page({
   },
   onLoad: function () {
     this.reloadData();
+    if (app.debug) {
+      wx.navigateTo({
+        url: "/pages/route/route?routeId=518&stopId=42962"
+      })
+    }
   },
   reloadData: function () {
     var self = this
@@ -17,8 +23,14 @@ Page({
         var latitude = res.latitude
         var longitude = res.longitude
         // debug
-        latitude = 30.128741;
-        longitude = 120.085117;
+        if (app.debug) {
+          latitude = 30.128741;
+          longitude = 120.085117;
+        }
+
+        app.latitude = latitude;
+        app.longitude = longitude;
+
         wx.request({
           url: "https://publictransit.dtdream.com/v1/bus/findNearbyStop?city=330100&radius=1000&lat=" + latitude + "&lng=" + longitude,
           success: function (res) {
@@ -30,10 +42,12 @@ Page({
               var onebus = oneroute.buses[0];
               
               var stop = {
-                stopId: onestop.stop.amapId,
+                stopId: onestop.stop.stopId,
+                stopAmapId: onestop.stop.amapId,
                 stopName: item.stopName,
                 userDistance: util.formatDistance(onestop ? onestop.stop.userDistance : undefined),
                 routeName: oneroute.route.routeName,
+                routeId: oneroute.route.routeId,
                 nextStation: oneroute.nextStation,
                 targetDistance: util.formatDistance(onebus ? onebus.targetDistance : undefined)
               }

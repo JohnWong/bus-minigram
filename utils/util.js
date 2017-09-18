@@ -16,7 +16,8 @@ const formatNumber = n => {
 
 module.exports = {
   formatTime: formatTime,
-  formatDistance: formatDistance
+  formatDistance: formatDistance,
+  formatBusTime: formatBusTime
 }
 
 function formatDistance(dist) {
@@ -29,4 +30,11 @@ function formatDistance(dist) {
   } else {
     return "暂无";
   }
+}
+
+function formatBusTime(time) {
+  if (time.length == 8) {
+    return time.substr(0, 5);
+  }
+  return time;
 }

@@ -9,11 +9,11 @@
   <text class="search-cancel" style="display: {{focused ? '' : 'none'}};">取消</text>
 </view>
 <view style="background: white; margin-top: 8px;" wx:for="{{stops}}" wx:key="stopName">
-  <navigator url="/pages/stop/stop?stopId={{item.stopId}}&stopName={{item.stopName}}" style="background: #f8fbff; padding: 8px 16px 8px 16px; display: flex; justify-content: space-between;">
+  <navigator url="/pages/stop/stop?stopId={{item.stopAmapId}}&stopName={{item.stopName}}" style="background: #f8fbff; padding: 8px 16px 8px 16px; display: flex; justify-content: space-between;">
     <text style="color: #4a4a4a; font-size: 14px;">{{item.stopName}}</text>
     <text style="font-size: 12px;">{{item.userDistance}}</text>
   </navigator>
-  <view style="padding: 8px 16px 8px 16px;">
+  <navigator url="/pages/route/route?routeId={{item.routeId}}&stopId={{item.stopId}}" style="padding: 8px 16px 8px 16px;">
     <view style="display: flex; justify-content: space-between;">
       <text style="font-size: 18px; color: #4a4a4a;">{{item.routeName}}</text>
       <text style="font-size: 14px;">{{item.targetDistance}}</text>
@@ -21,5 +21,5 @@
     <view style="font-size: 12px; color: #8e8e93; margin-top: 4px;">
       <text>下一站：{{item.nextStation}}</text>
     </view>
-  </view>
+  </navigator>
 </view>

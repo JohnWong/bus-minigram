@@ -1,0 +1,36 @@
+<!--pages/route/route.wxml-->
+<view style="background: white; padding: 16px;">
+  <view style="margin-top: 8px;font-size: 14px; color: #434343;">
+    <text>{{item.origin}}</text>
+    <text style="color: #8d8d8d; font-size: 12px; margin-left: 4px; margin-right: 4px;">→</text>
+    <text>{{item.terminal}}</text>
+  </view>
+  <view class="bus-info">
+    <view>全程：{{item.distance}}公里</view>
+    <view>
+      <text style="color: #f15a4a">首</text>{{item.firstBus}}
+    </view>
+    <view>
+      <text style="color: #30ab8f">末</text>{{item.lastBus}}
+    </view>
+    <view>票价：{{item.airPrice}}元</view>
+  </view>
+</view>
+<scroll-view scroll-x style="width: 100%;white-space: nowrap;">
+  <view style="display: flex; flex-direction: row;">
+    <view wx:for="{{stops}}" wx:key="{{stopId}}" style="display: flex;flex-shrink: 0; width: 48px; flex-direction: column; align-items: center;">
+      <view style="width: 100%; height: 36px">
+        <view style="display: {{item.bus.arrive ? 'block' : 'none'}}">
+          <text>1</text>
+        </view>
+        <view style="display: {{item.bus.nextBus ? 'block' : 'none'}}">
+          <text>2</text>
+        </view>
+      </view>
+      <view style="background: #a4a9b0; height: 6px; width: 100%; display: flex; justify-content: center; align-items: center;">
+        <view style="width: 4px; height: 4px; border-radius: 2px; background-color: white;"></view>
+      </view>
+      <text style="margin-top: 15px; color: {{item.userStop ? 'red' : '#434343'}}; text-alignment: center; width: 20px; writing-mode:tb;">{{item.stopName}}</text>
+    </view>
+  </view>
+</scroll-view>
