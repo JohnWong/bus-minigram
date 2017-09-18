@@ -45,19 +45,31 @@ Page({
           }
         }
         var stops = [];
-        for (var i in oneroute.stops) {
+        var userIndex = 0;
+        for (var i =0; i < oneroute.stops.length; i++) {
           var item = oneroute.stops[i];
+          var userStop = item.routeStop.stopId == self.stopId;
+          if (userStop) {
+            userIndex = i;
+          }
           stops.push({
             stopName: item.routeStop.stopName,
             stopId: item.routeStop.stopId,
-            userStop: item.routeStop.stopId == self.stopId,
+            userStop: userStop,
             metroTrans: item.routeStop.metroTrans,
             bus: busMap[item.routeStop.seqNo]
           })
         }
-
+        
+        let itemWidth = 56;
+        let windowWidth = wx.getSystemInfoSync().windowWidth;
+        var stopScroll = (userIndex + 0.5) * itemWidth - windowWidth / 2;
+        stopScroll = Math.max(stopScroll, 0)
+        stopScroll = Math.min(stopScroll, stops.length * itemWidth - windowWidth);
+        
         self.setData({
           stopId: self.stopId,
+          stopScroll: stopScroll,
           item: {
             routeName: data.routeName,
             origin: oneroute.route.origin,
