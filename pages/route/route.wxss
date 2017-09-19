@@ -8,3 +8,19 @@
   flex-shrink: 0;
   flex-grow: 0;
 }
+
+.stop-normal {
+  width: 4px;
+  height: 4px;
+  border-radius: 100%;
+  background-color: white;
+}
+
+.stop-user {
+  width: 6px;
+  height: 6px;
+  border-radius: 100%;
+  background-color: red;
+  border: 2px solid #fff;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+}

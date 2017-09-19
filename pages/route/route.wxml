@@ -1,34 +1,42 @@
 <!--pages/route/route.wxml-->
 <view style="background: white; padding: 16px;">
   <view style="margin-top: 8px;font-size: 14px; color: #434343;">
-    <text>{{item.origin}}</text>
+    <text>{{origin}}</text>
     <text style="color: #8d8d8d; font-size: 12px; margin-left: 4px; margin-right: 4px;">→</text>
-    <text>{{item.terminal}}</text>
+    <text>{{terminal}}</text>
   </view>
   <view class="bus-info">
-    <view>全程：{{item.distance}}公里</view>
+    <view>全程：{{distance}}公里</view>
     <view>
-      <text style="color: #f15a4a">首</text>{{item.firstBus}}
+      <text style="color: #f15a4a">首</text>{{firstBus}}
     </view>
     <view>
-      <text style="color: #30ab8f">末</text>{{item.lastBus}}
+      <text style="color: #30ab8f">末</text>{{lastBus}}
     </view>
-    <view>票价：{{item.airPrice}}元</view>
+    <view>票价：{{airPrice}}元</view>
+  </view>
+  <view style="padding: 16px">
+    <view wx:for="{{buses}}" wx:key="*this">
+      <text>{{item.targetStopCount}}</text>
+      <text>{{item.targetDistance}}</text>
+    </view>
   </view>
 </view>
 <scroll-view scroll-left="{{stopScroll}}" scroll-x style="width: 100%; white-space: nowrap;">
   <view style="display: flex; flex-direction: row;">
-    <view wx:for="{{stops}}" class="stop-item" wx:key="*this" style="">
+    <view wx:for="{{stops}}" class="stop-item" wx:key="*this" bindtap="changeStop" data-stop="{{item.stopId}}">
       <view style="width: 100%; height: 24px; margin-top: 16px;">
         <view style="display: inline-block; width: 50%;">
           <image wx:if="{{item.bus.nextBus}}" style="width: 20px; height: 10px; margin-left: -10px;" src="/resources/bus.png" />
         </view>
         <view style="display: inline-block; width: 50%;">
+          <image wx:if="{{item.userStop && !item.bus.arrive}}" style="width: 14px; height: 16px; margin-left: -7px;" src="/resources/location.png" />
           <image wx:if="{{item.bus.arrive}}" style="width: 20px; height: 10px; margin-left: -10px;" src="/resources/bus.png" />
         </view>
       </view>
       <view style="background: #a4a9b0; height: 6px; width: 100%; display: flex; justify-content: center; align-items: center;">
-        <view style="width: 4px; height: 4px; border-radius: 2px; background-color: white;"></view>
+        <view class="{{item.userStop ? 'stop-user' : 'stop-normal'}}"></view>
+        <view></view>
       </view>
       <text style="margin-top: 15px; color: {{item.userStop ? 'red' : '#434343'}}; text-alignment: center; width: 20px; writing-mode:tb;">{{item.stopName}}</text>
     </view>

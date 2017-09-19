@@ -30,10 +30,10 @@ Page({
         wx.setNavigationBarTitle({
           title: data.routeName,
         })
-        
+
         var stops = [];
         var userIndex = 0;
-        for (var i =0; i < oneroute.stops.length; i++) {
+        for (var i = 0; i < oneroute.stops.length; i++) {
           var item = oneroute.stops[i];
           var userStop = item.routeStop.stopId == self.stopId;
           if (userStop) {
@@ -56,25 +56,35 @@ Page({
             bus: bus
           })
         }
-        
+
+        var buses = [];
+        for (var i in oneroute.nextBuses.buses) {
+          var bus = oneroute.nextBuses.buses[i];
+          buses.push({
+            isArrive: bus.isArrive,
+            targetStopCount: bus.targetStopCount,
+            targetDistance: util.formatDistance(bus.targetDistance),
+            nextStation: bus.nextStation
+          })
+        }
+
         let itemWidth = 56;
         let windowWidth = wx.getSystemInfoSync().windowWidth;
         var stopScroll = (userIndex + 0.5) * itemWidth - windowWidth / 2;
         stopScroll = Math.max(stopScroll, 0)
         stopScroll = Math.min(stopScroll, stops.length * itemWidth - windowWidth);
-        
+
         self.setData({
           stopId: self.stopId,
           stopScroll: stopScroll,
-          item: {
-            routeName: data.routeName,
-            origin: oneroute.route.origin,
-            terminal: oneroute.route.terminal,
-            firstBus: util.formatBusTime(oneroute.route.firstBus),
-            lastBus: util.formatBusTime(oneroute.route.lastBus),
-            distance: oneroute.route.distance,
-            airPrice: oneroute.route.airPrice
-          },
+          buses: buses,
+          routeName: data.routeName,
+          origin: oneroute.route.origin,
+          terminal: oneroute.route.terminal,
+          firstBus: util.formatBusTime(oneroute.route.firstBus),
+          lastBus: util.formatBusTime(oneroute.route.lastBus),
+          distance: oneroute.route.distance,
+          airPrice: oneroute.route.airPrice,
           stops: stops
         })
       },
@@ -89,6 +99,12 @@ Page({
    */
   onReady: function () {
 
+  },
+
+  changeStop: function (e) {
+    var stopId = e.currentTarget.dataset.stop;
+    this.stopId = stopId;
+    this.loadData();
   },
 
   /**
