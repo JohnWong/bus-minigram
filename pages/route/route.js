@@ -23,19 +23,38 @@ Page({
   loadData: function () {
     var self = this;
     wx.request({
-      url: "https://publictransit.dtdream.com/v1/bus/getBusPositionByRouteId?userLng=" + app.longitude + "&userLat=" + app.latitude + "&routeId=" + this.routeId + "&stopId=" + this.stopId,
+      url: "https://publictransit.dtdream.com/v1/bus/getBusPositionByRouteId?userLng=" + app.longitude + "&userLat=" + app.latitude + "&routeId=" + this.routeId,
       success: function (res) {
         var data = res.data.items[0];
         var oneroute = data.routes[0];
         wx.setNavigationBarTitle({
           title: data.routeName,
         })
-
+        self.setData({
+          stopId: self.stopId,
+          routeName: data.routeName,
+          origin: oneroute.route.origin,
+          terminal: oneroute.route.terminal,
+          firstBus: util.formatBusTime(oneroute.route.firstBus),
+          lastBus: util.formatBusTime(oneroute.route.lastBus),
+          distance: oneroute.route.distance,
+          airPrice: oneroute.route.airPrice
+        })
+      }
+    });
+    // TODO metroTrans需要从前一个接口缓存下来
+    wx.request({
+      url: "https://publictransit.dtdream.com/v1/bus/getNextBusByRouteStopId?userLng=" + app.longitude + "&userLat=" + app.latitude + "&routeId=" + this.routeId + "&stopId=" + this.stopId,
+      success: function (res) {
+        var data = res.data.item;
+        
         var stops = [];
+        var buses = [];
+        var shouldStop = false;
         var userIndex = 0;
-        for (var i = 0; i < oneroute.stops.length; i++) {
-          var item = oneroute.stops[i];
-          var userStop = item.routeStop.stopId == self.stopId;
+        for (var i = 0; i < data.stops.length; i++) {
+          var item = data.stops[i];
+          var userStop = item.stopId == self.stopId;
           if (userStop) {
             userIndex = i;
           }
@@ -47,19 +66,24 @@ Page({
             } else {
               bus.nextBus = true;
             }
+            buses.push({
+              isArrive: bus.isArrive,
+              targetStopCount: 1,
+              targetDistance: bus.distance
+            })
           }
           stops.push({
-            stopName: item.routeStop.stopName,
-            stopId: item.routeStop.stopId,
+            stopName: item.stopName,
+            stopId: item.stopId,
             userStop: userStop,
-            metroTrans: item.routeStop.metroTrans,
+            // metroTrans: item.routeStop.metroTrans,
             bus: bus
           })
         }
 
         var buses = [];
-        for (var i in oneroute.nextBuses.buses) {
-          var bus = oneroute.nextBuses.buses[i];
+        for (var i in data.nextBuses.buses) {
+          var bus = data.nextBuses.buses[i];
           buses.push({
             isArrive: bus.isArrive,
             targetStopCount: bus.targetStopCount,
@@ -78,13 +102,6 @@ Page({
           stopId: self.stopId,
           stopScroll: stopScroll,
           buses: buses,
-          routeName: data.routeName,
-          origin: oneroute.route.origin,
-          terminal: oneroute.route.terminal,
-          firstBus: util.formatBusTime(oneroute.route.firstBus),
-          lastBus: util.formatBusTime(oneroute.route.lastBus),
-          distance: oneroute.route.distance,
-          airPrice: oneroute.route.airPrice,
           stops: stops
         })
       },
