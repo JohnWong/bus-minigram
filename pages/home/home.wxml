@@ -9,7 +9,7 @@
   <text class="search-cancel" bindtap="tapCancel" style="display: {{focused ? '' : 'none'}};">取消</text>
 </view>
 <view wx:if="{{!searchRoutes && !searchStops}}" style="background: white; margin-top: 8px;" wx:for="{{stops}}" wx:key="stopName">
-  <navigator url="/pages/stop/stop?stopId={{item.stopAmapId}}&stopName={{item.stopName}}" style="background: #f8fbff; padding: 8px 16px 8px 16px; display: flex; justify-content: space-between;">
+  <navigator url="/pages/stop/stop?stopId={{item.amapId}}&stopName={{item.stopName}}" style="background: #f8fbff; padding: 8px 16px 8px 16px; display: flex; justify-content: space-between;">
     <text style="color: #4a4a4a; font-size: 14px;">{{item.stopName}}</text>
     <text style="font-size: 12px;">{{item.userDistance}}</text>
   </navigator>
@@ -39,7 +39,7 @@
 </view>
 <view wx:if="{{searchStops && searchStops.length > 0}}">
   <view style="padding: 8px 16px 8px 16px;border-bottom: 1px solid #f2f2f2; font-size: 12px; color: #201e1e">站点</view>
-  <navigator url="/pages/stop/stop?stopId={{item.stopAmapId}}&stopName={{item.stopName}}" wx:for="{{searchStops}}" wx:key="{{routeId}}" class="search-cell">
+  <navigator url="/pages/stop/stop?stopId={{item.amapId}}&stopName={{item.stopName}}" wx:for="{{searchStops}}" wx:key="{{routeId}}" class="search-cell">
     <text style="font-size: 16px; color: #201e1e">{{item.stopName}}</text>
   </navigator>
   <view wx:if="{{stopFold}}" class="search-cell" style="color: #8e8e93; font-size: 12px" bindtap="stopMore">

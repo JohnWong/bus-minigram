@@ -44,7 +44,7 @@ Page({
 
               var stop = {
                 stopId: onestop.stop.stopId,
-                stopAmapId: onestop.stop.amapId,
+                amapId: onestop.stop.amapId,
                 stopName: item.stopName,
                 userDistance: util.formatDistance(onestop ? onestop.stop.userDistance : undefined),
                 routeName: oneroute.route.routeName,

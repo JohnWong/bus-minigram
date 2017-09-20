@@ -32,6 +32,7 @@ Page({
         wx.setNavigationBarTitle({
           title: oneitem.stopName
         })
+        // TODO 不能onestop
         var onestop = oneitem.stops[0];
         var routes = [];
         for (var i in onestop.routes) {
