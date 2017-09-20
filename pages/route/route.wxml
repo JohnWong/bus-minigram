@@ -16,17 +16,21 @@
     <view>票价：{{airPrice}}元</view>
   </view>
   <view class="bus-area">
+     <view wx:if="{{buses.length == 0}}" style="color: #929192; font-size: 16px;">
+        当前暂无车辆信息
+      </view>
     <view wx:for="{{buses}}" wx:key="*this" class="bus-info">
-      <view>
-        <text style="color: #1e82d2; font-size: 20px; margin-right: 6px;">{{item.targetStopCount}}</text>
+      <view wx:if="{{item.targetStopCount == 0}}" style="color: #1e82d2; font-size: 20px; margin-right: 4px;">即将到站</view>
+      <view wx:if="{{item.targetStopCount > 0}}">
+        <text style="color: #1e82d2; font-size: 20px; margin-right: 4px;">{{item.targetStopCount}}</text>
         <text style="color: black; font-size: 15px">站</text>
       </view>
       <view style="color: #8e8e93; font-size: 12px;">
         {{item.targetDistance}}
       </view>
     </view>
-    <view>到达</view>
-    <view>{{buses[0].nextStation}}</view>
+    <view wx:if="{{buses.length == 1}}" style="color: #8e8e93; font-size: 12px;">到达</view>
+    <view wx:if="{{buses.length == 1}}">{{buses[0].nextStation}}</view>
   </view>
 </view>
 <scroll-view scroll-left="{{stopScroll}}" scroll-x style="width: 100%; white-space: nowrap; margin-bottom: 56px;">

@@ -44,4 +44,5 @@
 
 .bus-area view {
   flex-grow: 1;
+  text-align: center;
 }
