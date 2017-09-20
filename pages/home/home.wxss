@@ -20,9 +20,6 @@
 }
 
 .search-hint {
-  position: absolute;
-  padding: inherit;
-  margin-left: 22px;
   color: lightgray;
   font-size: 14px;
 }
@@ -41,15 +38,27 @@
 .search-cancel {
   font-size: 14px;
   flex-shrink: 0;
-  color: #007AFF;
+  color: #007aff;
   margin-left: 6px;
   margin-right: 6px;
 }
+
 .tab-header {
   padding: 8px 0 8px 0;
   background: white;
-  display: flex; 
+  display: flex;
   justify-content: center;
-  color: #007AFF;
+  color: #007aff;
   font-size: 15px;
+}
+
+.search-cell {
+  height: 50px;
+  border-bottom: 1px solid #f2f2f2;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  padding-left: 16px;
+  padding-right: 16px;
+  justify-content: center;
 }

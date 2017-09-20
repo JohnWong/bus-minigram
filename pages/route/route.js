@@ -187,8 +187,8 @@ Page({
   changeStop: function (e) {
     this.stopId = e.currentTarget.dataset.stop;
     var stop = this.stopMap[this.stopId];
-    this.amapId = e.currentTarget.dataset.amapId;
-    this.stopName = e.currentTarget.dataset.stopName;
+    this.amapId = stop.amapId;
+    this.stopName = stop.stopName;
     this.loadBusData();
   },
 
