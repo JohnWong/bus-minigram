@@ -21,12 +21,20 @@ Page({
   },
 
   loadData: function () {
+    wx.showLoading();
     var self = this;
     wx.request({
       url: "https://publictransit.dtdream.com/v1/bus/getBusPositionByRouteId?userLng=" + app.longitude + "&userLat=" + app.latitude + "&routeId=" + this.routeId,
       success: function (res) {
+        if (res.data.result != 0) {
+          wx.showToast({
+            title: res.data.message
+          })
+          return;
+        }
         var data = res.data.items[0];
         var oneroute = data.routes[0];
+        self.oppositeId = oneroute.route.oppositeId;
         wx.setNavigationBarTitle({
           title: data.routeName,
         })
@@ -40,14 +48,71 @@ Page({
           distance: oneroute.route.distance,
           airPrice: oneroute.route.airPrice
         })
+
+        var stopMap = {};
+        for (var i in oneroute.stops) {
+          var stop = oneroute.stops[i].routeStop;
+          stopMap[stop.stopId] = stop;
+        }
+        self.stopMap = stopMap;
+
+        if (!self.amapId && self.stopId) {
+          for (var i in oneroute.stops) {
+            var stop = oneroute.stops[i].routeStop;
+            if (stop.stopId == self.stopId) {
+              self.amapId = stop.amapId;
+              self.stopName = stop.stopName;
+              break;
+            }
+          }
+        }
+        if (!self.stopId && self.amapId) {
+          for (var i in oneroute.stops) {
+            var stop = oneroute.stops[i].routeStop;
+            if (stop.amapId == self.amapId) {
+              self.stopId = "" + stop.stopId;
+              self.stopName = stop.stopName;
+              break;
+            }
+          }
+        }
+        if (!self.stopId && self.stopName) {
+          for (var i in oneroute.stops) {
+            var stop = oneroute.stops[i].routeStop;
+            if (stop.stopName == self.stopName) {
+              self.stopId = "" + stop.stopId;
+              self.amapId = stop.amapId;
+              break;
+            }
+          }
+        }
+        if (!self.stopId) {
+          var routeStop = oneroute.stops[0].routeStop;
+          self.stopId = routeStop.stopId;
+          self.amapId = routeStop.amapId;
+          self.stopName = routeStop.stopName;
+        }
+        self.loadBusData();
       }
     });
-    // TODO metroTrans需要从前一个接口缓存下来
+  },
+
+  loadBusData: function () {
+    wx.showLoading();
+    var self = this;
     wx.request({
       url: "https://publictransit.dtdream.com/v1/bus/getNextBusByRouteStopId?userLng=" + app.longitude + "&userLat=" + app.latitude + "&routeId=" + this.routeId + "&stopId=" + this.stopId,
       success: function (res) {
+        wx.hideLoading();
+        if (res.data.result != 0) {
+          wx.showToast({
+            title: res.data.message
+          })
+          return;
+        }
+
         var data = res.data.item;
-        
+
         var stops = [];
         var buses = [];
         var shouldStop = false;
@@ -72,11 +137,13 @@ Page({
               targetDistance: bus.distance
             })
           }
+          var fullStop = self.stopMap[item.stopId];
           stops.push({
             stopName: item.stopName,
             stopId: item.stopId,
             userStop: userStop,
-            // metroTrans: item.routeStop.metroTrans,
+            metroTrans: fullStop.metroTrans,
+            amapId: fullStop.amapId,
             bus: bus
           })
         }
@@ -110,7 +177,6 @@ Page({
       }
     })
   },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -119,8 +185,19 @@ Page({
   },
 
   changeStop: function (e) {
-    var stopId = e.currentTarget.dataset.stop;
-    this.stopId = stopId;
+    this.stopId = e.currentTarget.dataset.stop;
+    var stop = this.stopMap[this.stopId];
+    this.amapId = e.currentTarget.dataset.amapId;
+    this.stopName = e.currentTarget.dataset.stopName;
+    this.loadBusData();
+  },
+
+  changeDirection: function () {
+    if (!this.oppositeId) {
+      return;
+    }
+    this.routeId = this.oppositeId;
+    this.stopId = undefined;
     this.loadData();
   },
 

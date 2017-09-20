@@ -13,7 +13,7 @@
     <view style="font-size: 12px; color: #8e8e93; margin-top: 4px;">
       <text>下一站：{{item.nextStation}}</text>
     </view>
-    <view class="bus-info">
+    <view class="route-info">
       <view >
         <text style="color: #f15a4a">首</text>{{item.firstBus}}
       </view>

@@ -11,8 +11,8 @@ Page({
     this.reloadData();
     if (app.debug) {
       wx.navigateTo({
-        url: "/pages/route/route?routeId=732&stopId=41491"
-        // url: "/pages/route/route?routeId=518&stopId=51634"
+        // url: "/pages/route/route?routeId=732&stopId=41491"
+        url: "/pages/route/route?routeId=518&stopId=51634"
       })
     }
   },

@@ -24,3 +24,24 @@
   border: 2px solid #fff;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
 }
+
+.bus-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.bus-area {
+  margin-top: 8px;
+  background: #f6f6f6;
+  border-radius: 2px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bus-area view {
+  flex-grow: 1;
+}

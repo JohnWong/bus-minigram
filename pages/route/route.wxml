@@ -1,11 +1,11 @@
 <!--pages/route/route.wxml-->
 <view style="background: white; padding: 16px;">
-  <view style="margin-top: 8px;font-size: 14px; color: #434343;">
+  <view style="font-size: 14px; color: #434343;">
     <text>{{origin}}</text>
     <text style="color: #8d8d8d; font-size: 12px; margin-left: 4px; margin-right: 4px;">→</text>
     <text>{{terminal}}</text>
   </view>
-  <view class="bus-info">
+  <view class="route-info">
     <view>全程：{{distance}}公里</view>
     <view>
       <text style="color: #f15a4a">首</text>{{firstBus}}
@@ -15,14 +15,21 @@
     </view>
     <view>票价：{{airPrice}}元</view>
   </view>
-  <view style="padding: 16px">
-    <view wx:for="{{buses}}" wx:key="*this">
-      <text>{{item.targetStopCount}}</text>
-      <text>{{item.targetDistance}}</text>
+  <view class="bus-area">
+    <view wx:for="{{buses}}" wx:key="*this" class="bus-info">
+      <view>
+        <text style="color: #1e82d2; font-size: 20px; margin-right: 6px;">{{item.targetStopCount}}</text>
+        <text style="color: black; font-size: 15px">站</text>
+      </view>
+      <view style="color: #8e8e93; font-size: 12px;">
+        {{item.targetDistance}}
+      </view>
     </view>
+    <view>到达</view>
+    <view>{{buses[0].nextStation}}</view>
   </view>
 </view>
-<scroll-view scroll-left="{{stopScroll}}" scroll-x style="width: 100%; white-space: nowrap;">
+<scroll-view scroll-left="{{stopScroll}}" scroll-x style="width: 100%; white-space: nowrap; margin-bottom: 56px;">
   <view style="display: flex; flex-direction: row;">
     <view wx:for="{{stops}}" class="stop-item" wx:key="*this" bindtap="changeStop" data-stop="{{item.stopId}}">
       <view style="width: 100%; height: 24px; margin-top: 16px;">
@@ -42,3 +49,21 @@
     </view>
   </view>
 </scroll-view>
+<view style="position: fixed; bottom: 0; height: 49px; left: 0; right: 0; background-color: white; display: flex;">
+  <view class="tabbar-item" bindtap="changeDirection">
+    <image src="/resources/exchange.png" />
+    <text>换向</text>
+  </view>
+  <view class="tabbar-item">
+    <image src="/resources/collect.png" />
+    <text>订阅</text>
+  </view>
+  <!-- <view class="tabbar-item">
+    <image src="/resources/pay.png" />
+    <text>支付</text>
+  </view> -->
+  <view class="tabbar-item" bindtap="loadBusData">
+    <image src="/resources/refresh.png" />
+    <text>刷新</text>
+  </view>
+</view>
