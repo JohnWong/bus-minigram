@@ -5,7 +5,6 @@ const app = getApp()
 Page({
   data: {
     focused: false,
-    logs: []
   },
   onLoad: function () {
     this.reloadData();
@@ -80,12 +79,14 @@ Page({
     this.setData({
       focused: true
     })
+    this.searchInit();
   },
   tapCancel: function () {
     this.routes = null;
     this.stops = null;
     this.setData({
       focused: false,
+      history: null,
       searchText: '',
       searchStops: null,
       searchRoutes: null
@@ -107,13 +108,18 @@ Page({
   },
   searchClear: function (event) {
     this.setData({
-      searchText: ''
+      focused: true,
+      searchText: '',
+      searchStops: null,
+      searchRoutes: null
     })
     this.searchInit();
   },
   searchInit: function () {
-    // TODO
-    this.search('');
+    var history = util.loadHistory();
+    this.setData({
+      history: history ? history : []
+    })
   },
   search: function (word) {
     var self = this;
@@ -138,7 +144,6 @@ Page({
           searchRoutes: routes.slice(0, foldCount),
           routeFold: routes.length > foldCount
         })
-
       }
     })
 
@@ -175,6 +180,22 @@ Page({
     this.setData({
       searchStops: this.stops,
       stopFold: false
+    })
+  },
+  tapSearchRoute: function (e) {
+    var ds = e.currentTarget.dataset;
+    util.saveHistory({
+      type: "route",
+      routeId: ds.routeid,
+      routeName: ds.routename
+    })
+  },
+  tapSearchStop: function (e) {
+    var ds = e.currentTarget.dataset;
+    util.saveHistory({
+      type: "stop",
+      stopId: ds.stopid,
+      stopName: ds.stopname
     })
   }
 })

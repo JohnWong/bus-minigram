@@ -14,12 +14,6 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
-module.exports = {
-  formatTime: formatTime,
-  formatDistance: formatDistance,
-  formatBusTime: formatBusTime
-}
-
 function formatDistance(dist) {
   if (dist) {
     if (dist > 1000) {
@@ -37,4 +31,57 @@ function formatBusTime(time) {
     return time.substr(0, 5);
   }
   return time;
+}
+
+let historyKey = "history"
+
+function saveHistory(item) {
+  let maxCount = 10;
+  let newValue = [];
+  newValue.push(item);
+
+  var value
+  try {
+    value = wx.getStorageSync(historyKey)
+  } catch (e) {
+    // Do something when catch error
+  }
+  if (value) {
+    for (var i in value) {
+      var each = value[i];
+      if (each.type == "route"
+        && item.type == "route"
+        && item.routeId == each.routeId) {
+        continue;
+      }
+      if (each.type == "stop"
+        && item.type == "stop"
+        && item.stopId == each.stopId) {
+        continue;
+      }
+      newValue.push(each);
+      if (newValue.length == 0) {
+        break;
+      }
+    }
+  }
+  wx.setStorageSync(historyKey, newValue);
+}
+
+function loadHistory() {
+  try {
+    var value = wx.getStorageSync(historyKey)
+    return value;
+  } catch (e) {
+    // Do something when catch error
+  }
+  return null;
+}
+
+module.exports = {
+  formatTime: formatTime,
+  formatDistance: formatDistance,
+  formatBusTime: formatBusTime,
+  loadHistory: loadHistory,
+  saveHistory: saveHistory
 }

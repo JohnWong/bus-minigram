@@ -26,7 +26,8 @@
 
 .clear-icon {
   margin-left: auto;
-  margin-right: 6px;
+  margin-right: 0;
+  padding: 6px;
   flex-shrink: 0;
 }
 
