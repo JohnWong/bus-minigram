@@ -1,66 +1,137 @@
 // pages/search.js
+const util = require('../../utils/util.js')
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-  
+    focused: true
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-  
+  onLoad: function () {
+    wx.setNavigationBarTitle({
+      title: '搜索'
+    })
+    this.searchFocus();
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
+  searchFocus: function () {
+    this.setData({
+      focused: true
+    })
+    this.searchInit();
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
+  tapCancel: function () {
+    this.routes = null;
+    this.stops = null;
+    this.setData({
+      focused: false,
+      history: null,
+      searchText: '',
+      searchStops: null,
+      searchRoutes: null
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
+  searchConfirm: function (event) {
+    var searchText = event.detail.value;
+    this.setData({
+      searchText: searchText
+    })
+    this.search(searchText)
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
+  searchInput: function (event) {
+    var searchText = event.detail.value;
+    this.setData({
+      searchText: searchText
+    })
+    this.search(searchText)
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
+  searchClear: function (event) {
+    this.setData({
+      focused: true,
+      searchText: '',
+      searchStops: null,
+      searchRoutes: null
+    })
+    this.searchInit();
   },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
+  searchInit: function () {
+    var history = util.loadHistory();
+    this.setData({
+      history: history ? history : []
+    })
   },
+  search: function (word) {
+    var self = this;
+    let foldCount = 4;
+    wx.request({
+      url: "https://publictransit.dtdream.com/v1/bus/findRouteByName?city=330100&routeName=" + encodeURIComponent(word),
+      success: function (res) {
+        if (res.data.result != 0) {
+          wx.showToast({
+            title: res.data.message
+          })
+          return;
+        }
+        var items = res.data.items;
+        var routes = [];
+        for (var i in items) {
+          var item = items[i];
+          routes.push(item.routes[0]);
+        }
+        self.routes = routes;
+        self.setData({
+          searchRoutes: routes.slice(0, foldCount),
+          routeFold: routes.length > foldCount
+        })
+      }
+    })
 
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
+    wx.request({
+      url: "https://publictransit.dtdream.com/v1/bus/findStopByName?city=330100&stopName=" + encodeURIComponent(word),
+      success: function (res) {
+        if (res.data.result != 0) {
+          wx.showToast({
+            title: res.data.message
+          })
+          return;
+        }
+        var items = res.data.items;
+        var stops = [];
+        for (var i in items) {
+          var item = items[i];
+          stops.push(item.stops[0]);
+        }
+        self.stops = stops;
+        self.setData({
+          searchStops: stops.slice(0, foldCount),
+          stopFold: stops.length > foldCount
+        })
+      }
+    })
+  },
+  routeMore: function () {
+    this.setData({
+      searchRoutes: this.routes,
+      routeFold: false
+    })
+  },
+  stopMore: function () {
+    this.setData({
+      searchStops: this.stops,
+      stopFold: false
+    })
+  },
+  tapSearchRoute: function (e) {
+    var ds = e.currentTarget.dataset;
+    util.saveHistory({
+      type: "route",
+      routeId: ds.routeid,
+      routeName: ds.routename
+    })
+  },
+  tapSearchStop: function (e) {
+    var ds = e.currentTarget.dataset;
+    util.saveHistory({
+      type: "stop",
+      stopId: ds.stopid,
+      stopName: ds.stopname
+    })
   }
 })

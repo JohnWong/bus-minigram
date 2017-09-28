@@ -1,2 +1,45 @@
 <!--pages/search.wxml-->
-<text>pages/search.wxml</text>
+<view class="search-bar">
+  <view class="search-inner">
+    <icon size="12" class="search-icon" type="search" />
+    <input class="search-input" auto-focus focus="{{focused}}" bindfocus="searchFocus" bindconfirm="searchConfirm" placeholder="搜索线路/站点" bindinput="searchInput" placeholder-class="search-hint" confirm-type="search" value="{{searchText}}" />
+    <icon size="12" class="clear-icon" color="lightgray" type="cancel" style="display: {{focused ? 'block' : 'none'}}" bindtap="searchClear" />
+  </view>
+  <text class="search-cancel" bindtap="tapCancel" style="display: {{focused ? '' : 'none'}};">取消</text>
+</view>
+<view wx:if="{{searchRoutes && searchRoutes.length > 0}}">
+  <view style="padding: 8px 16px 8px 16px;border-bottom: 1px solid #f2f2f2; font-size: 12px; color: #201e1e">线路</view>
+  <navigator url="/pages/route/route?routeId={{item.routeId}}" wx:for="{{searchRoutes}}" bindtap="tapSearchRoute" data-routename="{{item.routeName}}" data-routeid="{{item.routeId}}" wx:key="{{routeId}}" class="search-cell">
+    <text style="font-size: 16px; color: #201e1e">{{item.routeName}}</text>
+    <view style="font-size: 11px; color: #8e8e93;">
+      <text>{{item.origin}}</text>
+      <text style="color: #8d8d8d; font-size: 10px; margin-left: 4px; margin-right: 4px;">→</text>
+      <text>{{item.terminal}}</text>
+    </view>
+  </navigator>
+  <view wx:if="{{routeFold}}" class="search-cell" style="color: #8e8e93; font-size: 12px" bindtap="routeMore">
+    查看更多线路
+  </view>
+</view>
+<view wx:if="{{searchStops && searchStops.length > 0}}">
+  <view style="padding: 8px 16px 8px 16px;border-bottom: 1px solid #f2f2f2; font-size: 12px; color: #201e1e">站点</view>
+  <navigator url="/pages/stop/stop?stopId={{item.amapId}}&stopName={{item.stopName}}" wx:for="{{searchStops}}" wx:key="{{routeId}}" class="search-cell" bindtap="tapSearchStop" data-stopname="{{item.stopName}}" data-stopid="{{item.amapId}}">
+    <text style="font-size: 16px; color: #201e1e">{{item.stopName}}</text>
+  </navigator>
+  <view wx:if="{{stopFold}}" class="search-cell" style="color: #8e8e93; font-size: 12px" bindtap="stopMore">
+    查看更多站点
+  </view>
+</view>
+<view wx:if="{{searchRoutes && searchRoutes.length == 0 && searchStops && searchStops.length == 0}}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; color: #929292; font-size: 14px; padding-tap: 50%; margin-top: -64px; padding-top: 50%;">
+  <image style="width: 64px; height: 64px; margin-bottom: 8px;" src="/resources/no-result.png" /> 没有找到结果
+</view>
+<view wx:if="{{history && !searchRoutes && !searchStops}}">
+  <view wx:if="{{history.length}}" style="padding: 8px 16px 8px 16px;border-bottom: 1px solid #f2f2f2; font-size: 12px; color: #201e1e">搜索历史</view>
+  <view wx:for="{{history}}" wx:key="*this">
+    <navigator wx:if="{{item.type == 'route'}}" url="/pages/route/route?routeId={{item.routeId}}" class="search-cell">{{item.routeName}}</navigator>
+    <navigator wx:if="{{item.type == 'stop'}}" url="/pages/stop/stop?stopId={{item.stopId}}&stopName={{item.stopName}}" class="search-cell">{{item.stopName}}</navigator>
+  </view>
+  <view wx:if="{{history.length == 0}}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; color: #929292; font-size: 14px; padding-tap: 50%; margin-top: -64px; padding-top: 50%;">
+    <image style="width: 64px; height: 64px; margin-bottom: 8px;" src="/resources/no-result.png" /> 没有历史记录
+  </view>
+</view>

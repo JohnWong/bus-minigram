@@ -1,5 +1,5 @@
 <!--pages/stop/stop.wxml-->
-<view style="background: white; margin-top: 8px;" wx:for="{{routes}}" wx:key="routeName">
+<navigator style="background: white; margin-top: 8px;" wx:for="{{routes}}" wx:key="routeName" url="/pages/route/route?routeId={{item.routeId}}&stopId={{item.stopId}}">
   <view style="padding: 16px;">
     <view style="display: flex; justify-content: space-between;">
       <text style="font-size: 18px; color: #4a4a4a;">{{item.routeName}}</text>
@@ -23,4 +23,4 @@
       <view>票价：{{item.airPrice}}元</view>
     </view>
   </view>
-</view>
+</navigator>
