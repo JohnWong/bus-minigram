@@ -189,9 +189,15 @@ Page({
         return '' + time + '秒';
       }),
       success: function (res) {
+        if (res.cancel) {
+          return;
+        }
         self.interval = timeList[res.tapIndex];
         util.saveInterval(self.interval);
         self.loadBusData();
+      },
+      fail: function () {
+        
       }
     })
   },
