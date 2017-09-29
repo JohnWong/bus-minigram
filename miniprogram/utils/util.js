@@ -14,6 +14,20 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
+let intervalKey = "interval"
+
+function saveInterval(interval) {
+  wx.setStorageSync(intervalKey, interval);
+}
+
+function loadInterval() {
+  var interval = wx.getStorageSync(intervalKey);
+  if (interval < 5) {
+    interval = 10;
+  }
+  return interval;
+}
+
 function formatDistance(dist) {
   if (dist) {
     if (dist > 1000) {
@@ -83,5 +97,7 @@ module.exports = {
   formatDistance: formatDistance,
   formatBusTime: formatBusTime,
   loadHistory: loadHistory,
-  saveHistory: saveHistory
+  saveHistory: saveHistory,
+  saveInterval: saveInterval,
+  loadInterval: loadInterval
 }

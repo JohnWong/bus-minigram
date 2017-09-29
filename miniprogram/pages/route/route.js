@@ -10,7 +10,7 @@ Page({
   data: {
 
   },
-
+  interval: util.loadInterval(),
   /**
    * 生命周期函数--监听页面加载
    */
@@ -114,7 +114,6 @@ Page({
         var data = res.data.item;
 
         var stops = [];
-        var buses = [];
         var shouldStop = false;
         var userIndex = 0;
         for (var i = 0; i < data.stops.length; i++) {
@@ -131,11 +130,6 @@ Page({
             } else {
               bus.nextBus = true;
             }
-            buses.push({
-              isArrive: bus.isArrive,
-              targetStopCount: 1,
-              targetDistance: bus.distance
-            })
           }
           var fullStop = self.stopMap[item.stopId];
           stops.push({
@@ -157,6 +151,9 @@ Page({
             targetDistance: util.formatDistance(bus.targetDistance),
             nextStation: bus.nextStation
           })
+          if (buses.length == 3) {
+            break;
+          }
         }
 
         let itemWidth = 56;
@@ -174,14 +171,29 @@ Page({
       },
       fail: function () {
 
+      },
+      complete: function () {
+        if (self.timeout) {
+          clearTimeout(self.timeout)
+        }
+        self.timeout = setTimeout(self.loadBusData, self.interval * 1000);
       }
     })
   },
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
 
+  setInterval: function (e) {
+    var self = this;
+    var timeList = [5, 10, 20, 30];
+    wx.showActionSheet({
+      itemList: timeList.map(function(time) {
+        return '' + time + '秒';
+      }),
+      success: function (res) {
+        self.interval = timeList[res.tapIndex];
+        util.saveInterval(self.interval);
+        self.loadBusData();
+      }
+    })
   },
 
   changeStop: function (e) {
