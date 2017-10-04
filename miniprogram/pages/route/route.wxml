@@ -63,7 +63,7 @@
     <image src="/resources/collect.png" />
     <text>订阅</text>
   </view>
-  <view class="tabbar-item" bindtap="openMap" data-route="{{amapId}}">
+  <view class="tabbar-item" bindtap="openMap" data-route="{{amapId}}" data-stop="{{stopId}}" data-name="{{routeName}}">
     <image src="/resources/map.png"/>
     <text>地图</text>
   </view>

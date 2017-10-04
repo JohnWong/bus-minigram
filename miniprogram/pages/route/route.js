@@ -181,7 +181,9 @@ Page({
         if (self.timeout) {
           clearTimeout(self.timeout)
         }
-        self.timeout = setTimeout(self.loadBusData, self.interval * 1000);
+        if (app.getCurrentPage() == self) {
+          self.timeout = setTimeout(self.loadBusData, self.interval * 1000);
+        }
       }
     })
   },
@@ -248,8 +250,9 @@ Page({
 
   openMap: function (e) {
     app.stops = this.data.stops
+    var ds = e.currentTarget.dataset
     wx.navigateTo({
-      url: '/pages/map/map?routeId=' + e.currentTarget.dataset.route,
+      url: '/pages/map/map?routeId=' + ds.route + '&name=' + ds.name + '&stopId=' + ds.stop
     })
   },
 

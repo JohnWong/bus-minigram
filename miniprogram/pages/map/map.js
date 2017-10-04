@@ -15,22 +15,29 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    wx.setNavigationBarTitle({
+      title: options.name
+    })
     var stops = [];
-    for (var stop of app.stops) {
+    var currentStop;
+    for (var item of app.stops) {
       var size = 16
       var iconPath = '/resources/stop.png'
-      if (stop == app.stops[0]) {
+      if (item == app.stops[0]) {
         iconPath = '/resources/begin.png'
         size = 20
-      } else if (stop == app.stops[app.stops.length - 1]) {
+      } else if (item == app.stops[app.stops.length - 1]) {
         iconPath = '/resources/end.png'
         size = 20
       }
+      if (item.stopId == options.stopId) {
+        currentStop = item;
+      }
       stops.push({
-        id: stop.stopId,
+        id: item.stopId,
         iconPath: iconPath,
-        latitude: stop.latitude,
-        longitude: stop.longitude,
+        latitude: item.latitude,
+        longitude: item.longitude,
         color: "#1e82d2FF",
         fillColor: "#FFFFFFFF",
         width: size,
@@ -38,13 +45,20 @@ Page({
         anchor: {
           x: 0.5,
           y: 0.5
-        }
+        },
+        callout: currentStop == item? {
+          display: 'ALWAYS',
+          content: item.stopName,
+          fontSize: "14px",
+          borderRadius: 8,
+          padding: "8px"
+        } : undefined
       })
     }
     var self = this;
     self.setData({
-      latitude: app.latitude,
-      longitude: app.longitude
+      latitude: currentStop.latitude,
+      longitude: currentStop.longitude
     })
     this.routeId = options["routeId"];
     wx.request({
