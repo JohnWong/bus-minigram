@@ -49,7 +49,8 @@
         <view class="{{item.userStop ? 'stop-user' : 'stop-normal'}}"></view>
         <view></view>
       </view>
-      <text style="margin-top: 15px; color: {{item.userStop ? 'red' : '#434343'}}; text-alignment: center; width: 20px; writing-mode:tb;">{{item.stopName}}</text>
+      <text style="margin-top: 15px; color: {{item.userStop ? 'red' : '#434343'}}; alignment: center; width: 20px; writing-mode:tb;">{{item.stopName}}</text>
+       <image wx:if="{{item.metroTrans}}" style="margin-top: 4px; margin-right: 2px; width: 18px; height: 18px;" src="/resources/metro.png"/> 
     </view>
   </view>
 </scroll-view>

@@ -247,7 +247,6 @@ Page({
   },
 
   openMap: function (e) {
-    
     app.stops = this.data.stops
     wx.navigateTo({
       url: '/pages/map/map?routeId=' + e.currentTarget.dataset.route,
