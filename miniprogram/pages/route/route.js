@@ -17,6 +17,9 @@ Page({
   onLoad: function (options) {
     this.stopId = options.stopId;
     this.routeId = options.routeId;
+  },
+
+  onShow: function () {
     this.loadData();
   },
 
@@ -41,6 +44,7 @@ Page({
         self.setData({
           stopId: self.stopId,
           routeName: data.routeName,
+          amapId: oneroute.route.amapId,
           origin: oneroute.route.origin,
           terminal: oneroute.route.terminal,
           firstBus: util.formatBusTime(oneroute.route.firstBus),
@@ -96,11 +100,6 @@ Page({
       }
     });
   },
-  onHide: function () {
-    if (self.timeout) {
-      clearTimeout(self.timeout)
-    }
-  },
   loadBusData: function () {
     wx.showLoading();
     var self = this;
@@ -142,6 +141,8 @@ Page({
             userStop: userStop,
             metroTrans: fullStop.metroTrans,
             amapId: fullStop.amapId,
+            latitude: fullStop.lat,
+            longitude: fullStop.lng,
             bus: bus
           })
         }
@@ -224,31 +225,33 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
+    if (this.timeout) {
+      clearTimeout(this.timeout)
+    }
+  },
 
+  onHide: function () {
+    if (this.timeout) {
+      clearTimeout(this.timeout)
+    }
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
+    this.loadData()
+  },
 
+  openMap: function (e) {
+    
+    app.stops = this.data.stops
+    wx.navigateTo({
+      url: '/pages/map/map?routeId=' + e.currentTarget.dataset.route,
+    })
   },
 
   /**

@@ -5,7 +5,8 @@
     "pages/logs/logs",
     "pages/stop/stop",
     "pages/route/route",
-    "pages/search/search"
+    "pages/search/search",
+    "pages/map/map"
   ],
   "window": {
     "backgroundTextStyle": "dark",

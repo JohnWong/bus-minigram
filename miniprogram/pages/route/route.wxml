@@ -62,6 +62,10 @@
     <image src="/resources/collect.png" />
     <text>订阅</text>
   </view>
+  <view class="tabbar-item" bindtap="openMap" data-route="{{amapId}}">
+    <image src="/resources/map.png"/>
+    <text>地图</text>
+  </view>
   <view class="tabbar-item" bindtap="setInterval">
     <image src="/resources/timer.png" />
     <text>刷新间隔</text>
