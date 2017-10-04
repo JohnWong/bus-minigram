@@ -96,7 +96,11 @@ Page({
       }
     });
   },
-
+  onHide: function () {
+    if (self.timeout) {
+      clearTimeout(self.timeout)
+    }
+  },
   loadBusData: function () {
     wx.showLoading();
     var self = this;
