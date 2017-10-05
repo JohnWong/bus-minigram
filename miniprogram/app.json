@@ -11,7 +11,7 @@
   "window": {
     "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#1e82d2",
-    "navigationBarTitleText": "今日公交",
+    "navigationBarTitleText": "杭州公交",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#efeff4"
   },
