@@ -153,8 +153,7 @@ Page({
           buses.push({
             isArrive: bus.isArrive,
             targetStopCount: bus.targetStopCount,
-            targetDistance: util.formatDistance(bus.targetDistance),
-            nextStation: bus.nextStation
+            targetDistance: util.formatDistance(bus.targetDistance)
           })
           if (buses.length == 3) {
             break;
@@ -169,9 +168,23 @@ Page({
 
         self.setData({
           stopId: self.stopId,
+          stopName: self.stopName,
           stopScroll: stopScroll,
           buses: buses,
           stops: stops
+        })
+        var nearBus = buses[0];
+        var message;
+        if (!nearBus) {
+          message = "暂无车辆信息"
+        } else if (nearBus.targetStopCount == 0) {
+          message = "即将到站"
+        } else {
+          message = nearBus.targetStopCount + "站/" + nearBus.targetDistance 
+        }
+        message += "-[" + self.data.routeName + "→" + self.stopName + "]";
+        wx.setTopBarText({
+          text: message,
         })
       },
       fail: function () {
@@ -181,7 +194,7 @@ Page({
         if (self.timeout) {
           clearTimeout(self.timeout)
         }
-        if (app.getCurrentPage() == self) {
+        if (getCurrentPages()[0] == self) {
           self.timeout = setTimeout(self.loadBusData, self.interval * 1000);
         }
       }
@@ -236,9 +249,7 @@ Page({
   },
 
   onHide: function () {
-    if (this.timeout) {
-      clearTimeout(this.timeout)
-    }
+    
   },
 
   /**
@@ -263,10 +274,7 @@ Page({
 
   },
 
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
+  onCollect: function (e) {
 
   }
 })
