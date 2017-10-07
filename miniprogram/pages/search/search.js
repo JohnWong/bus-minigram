@@ -65,6 +65,7 @@ Page({
       success: function (res) {
         if (res.data.result != 0) {
           wx.showToast({
+            image: "/resources/error-empty.png",
             title: res.data.message
           })
           return;
@@ -80,6 +81,15 @@ Page({
           searchRoutes: routes.slice(0, foldCount),
           routeFold: routes.length > foldCount
         })
+      },
+      fail: function () {
+        wx.showToast({
+          image: "/resources/error-network.png",
+          title: '请求失败请重试',
+        })
+      },
+      complete: function () {
+        wx.stopPullDownRefresh()
       }
     })
 
@@ -88,6 +98,7 @@ Page({
       success: function (res) {
         if (res.data.result != 0) {
           wx.showToast({
+            image: "/resources/error-empty.png",
             title: res.data.message
           })
           return;
@@ -103,6 +114,15 @@ Page({
           searchStops: stops.slice(0, foldCount),
           stopFold: stops.length > foldCount
         })
+      },
+      fail: function () {
+        wx.showToast({
+          image: "/resources/error-network.png",
+          title: '请求失败请重试',
+        })
+      },
+      complete: function () {
+        wx.stopPullDownRefresh()
       }
     })
   },

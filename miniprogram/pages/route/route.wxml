@@ -1,19 +1,19 @@
 <!--pages/route/route.wxml-->
 <view style="background: white; padding: 16px;">
   <view style="font-size: 14px; color: #434343;">
-    <text>{{origin}}</text>
+    <text>{{origin || "--"}}</text>
     <text style="color: #8d8d8d; font-size: 12px; margin-left: 4px; margin-right: 4px;">→</text>
-    <text>{{terminal}}</text>
+    <text>{{terminal || "--"}}</text>
   </view>
   <view class="route-info">
-    <view>全程：{{distance}}公里</view>
+    <view>全程：{{distance || "--"}}公里</view>
     <view>
-      <text style="color: #f15a4a">首</text>{{firstBus}}
+      <text style="color: #f15a4a">首</text>{{firstBus || "--"}}
     </view>
     <view>
-      <text style="color: #30ab8f">末</text>{{lastBus}}
+      <text style="color: #30ab8f">末</text>{{lastBus || "--"}}
     </view>
-    <view>票价：{{airPrice}}元</view>
+    <view>票价：{{airPrice || "--"}}元</view>
   </view>
   <view class="bus-area">
     <view wx:if="{{buses.length == 0}}" style="color: #929192; font-size: 16px;">
@@ -22,11 +22,11 @@
     <view wx:for="{{buses}}" wx:key="*this" class="bus-info">
       <view wx:if="{{item.targetStopCount == 0}}" style="color: #1e82d2; font-size: 20px; margin-right: 4px;">即将到站</view>
       <view wx:if="{{item.targetStopCount > 0}}">
-        <text style="color: #1e82d2; font-size: 20px; margin-right: 4px;">{{item.targetStopCount}}</text>
+        <text style="color: #1e82d2; font-size: 20px; margin-right: 4px;">{{item.targetStopCount || "--"}}</text>
         <text style="color: black; font-size: 15px">站</text>
       </view>
       <view style="color: #8e8e93; font-size: 12px;">
-        {{item.targetDistance}}
+        {{item.targetDistance || "--"}}
       </view>
     </view>
     <view wx:if="{{buses.length == 1}}" style="color: #8e8e93; font-size: 12px;">到达</view>

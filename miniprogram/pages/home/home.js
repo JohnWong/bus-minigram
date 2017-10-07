@@ -34,6 +34,13 @@ Page({
         wx.request({
           url: "https://publictransit.dtdream.com/v1/bus/findNearbyStop?city=330100&radius=1000&lat=" + latitude + "&lng=" + longitude,
           success: function (res) {
+            if (res.data.result != 0) {
+              wx.showToast({
+                image: "/resources/error-empty.png",
+                title: res.data.message
+              })
+              return;
+            }
             var stops = [];
             for (var i in res.data.items) {
               var item = res.data.items[i];
@@ -64,17 +71,22 @@ Page({
             })
           },
           fail: function () {
-
+            wx.showToast({
+              image: "/resources/error-network.png",
+              title: '请求失败请重试',
+            })
+          },
+          complete: function () {
+            wx.stopPullDownRefresh()
           }
         })
-        // wx.openLocation({
-        //   latitude: latitude,
-        //   longitude: longitude,
-        //   scale: 28
-        // })
       },
       fail: function (res) {
-        console.log(res)
+        wx.showToast({
+          image: "/resources/error-location.png",
+          title: '定位失败请重试'
+        })
+        wx.stopPullDownRefresh()
       }
     })
   },

@@ -27,10 +27,11 @@ Page({
     wx.showLoading();
     var self = this;
     wx.request({
-      url: "https://publictransit.dtdream.com/v1/bus/getBusPositionByRouteId?userLng=" + app.longitude + "&userLat=" + app.latitude + "&routeId=" + this.routeId,
+      url: "https://publictransit.dtdream.com/v1/bus/getBusPositionByRouteId?userLng=" + (app.longitude || "") + "&userLat=" + (app.latitude || "") + "&routeId=" + this.routeId,
       success: function (res) {
         if (res.data.result != 0) {
           wx.showToast({
+            image: "/resources/error-empty.png",
             title: res.data.message
           })
           return;
@@ -97,6 +98,16 @@ Page({
           self.stopName = routeStop.stopName;
         }
         self.loadBusData();
+      },
+      fail: function () {
+        wx.hideLoading()
+        wx.showToast({
+          image: "/resources/error-network.png",
+          title: '请求失败请重试',
+        })
+      },
+      complete: function () {
+        wx.stopPullDownRefresh()
       }
     });
   },
@@ -104,11 +115,12 @@ Page({
     wx.showLoading();
     var self = this;
     wx.request({
-      url: "https://publictransit.dtdream.com/v1/bus/getNextBusByRouteStopId?userLng=" + app.longitude + "&userLat=" + app.latitude + "&routeId=" + this.routeId + "&stopId=" + this.stopId,
+      url: "https://publictransit.dtdream.com/v1/bus/getNextBusByRouteStopId?userLng=" + (app.longitude || "") + "&userLat=" + (app.latitude || "") + "&routeId=" + this.routeId + "&stopId=" + this.stopId,
       success: function (res) {
         wx.hideLoading();
         if (res.data.result != 0) {
           wx.showToast({
+            image: "/resources/error-empty.png",
             title: res.data.message
           })
           return;
@@ -188,7 +200,11 @@ Page({
         })
       },
       fail: function () {
-
+        wx.hideLoading();
+        wx.showToast({
+          image: "/resources/error-network.png",
+          title: '请求失败请重试',
+        })
       },
       complete: function () {
         if (self.timeout) {
@@ -215,9 +231,6 @@ Page({
         self.interval = timeList[res.tapIndex];
         util.saveInterval(self.interval);
         self.loadBusData();
-      },
-      fail: function () {
-        
       }
     })
   },

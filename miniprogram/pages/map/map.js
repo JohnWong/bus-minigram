@@ -67,6 +67,7 @@ Page({
         var busline = res.data.buslines[0];
         if (!busline) {
           wx.showToast({
+            image: "/resources/error-empty.png",
             title: '未找到线路',
           })
           return;
@@ -88,12 +89,15 @@ Page({
           }],
           markers: stops
         })
-        console.log
       },
       fail: function (res) {
         wx.showToast({
-          title: '请求失败',
+          image: "/resources/error-network.png",
+          title: '请求失败请重试',
         })
+      },
+      complete: function () {
+        wx.stopPullDownRefresh()
       }
     })
   },

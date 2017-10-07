@@ -30,7 +30,7 @@ Page({
       success: function (res) {
         if (res.data.result != 0) {
           wx.showToast({
-            icon: "failure",
+            image: "/resources/error-empty.png",
             title: res.data.message
           })
           return;
@@ -38,6 +38,7 @@ Page({
 
         if (res.data.items.length == 0) {
           wx.showToast({
+            image: "/resources/error-empty.png",
             title: '未找到该站点'
           })
           return;
@@ -75,43 +76,14 @@ Page({
         })
       },
       fail: function (err) {
-
+        wx.showToast({
+          image: "/resources/error-network.png",
+          title: '请求失败请重试',
+        })
+      },
+      complete: function () {
+        wx.stopPullDownRefresh()
       }
     })
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
   }
 })
