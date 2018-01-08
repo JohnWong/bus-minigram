@@ -1,6 +1,8 @@
 # bus-minigram
 杭州公交的小程序
 
+> 目前已经无法使用。使用的接口做了refer验证，小程序使用固定refer无法修改。所以目前没有办法获取数据了。
+
 开发历程：[微信小程序体验](http://johnwong.github.io/mobile/2017/10/05/mini-program-bus-today.html)
 
 目录结构：
